@@ -9,6 +9,8 @@ var choiceFour = document.querySelector("#choiceFour");
 var initialScreen= document.querySelector("#initialScreen");
 var currentScore= document.querySelector("#currentScore"); 
 var timer= document.querySelector("#timer"); 
+var submit= document.querySelector("#submit"); 
+var initials= document.querySelector("#initials");  
 var questions = [ 
   {
     question: "What is nvidea's latest archetecture?",
@@ -92,7 +94,7 @@ function checkAnswer(e) {
         if(e.target.textContent===questions[questionIndex].answer) { 
             console.log("I clicked the right answer") 
 
-            userScore+=5 
+            userScore+=20
         } else { 
           console.log("I clicked the wrong answer")
         }
@@ -112,8 +114,34 @@ function endGame(){
   initialScreen.style.display="block" 
   quizScreen.style.display="none"
   currentScore.textContent = userScore
+} 
+function saveHighScore() { 
+  var currentUserInitials= initials.value  
+  var currentUser= { 
+    name:currentUserInitials, 
+    score: userScore, 
+  }
+
+var allHighScores= JSON.parse(localStorage.getItem("HighScores")) || [] 
+allHighScores.push(currentUser) 
+displayHighScores (allHighScores)
+localStorage.setItem("HighScores", JSON.stringify(allHighScores)) 
+
+} 
+function displayHighScores(scores) { 
+  document.getElementById("allHighScores").innerHtml= ""
+for(i=0; i<scores.length; i++) { 
+  var person= document.createElement("li") 
+  person.textContent= scores[i].name + ": " + scores[i].score  
+  document.getElementById("allHighScores").appendChild(person)
+}
 }
 
 startButton.addEventListener("click", startQuiz); 
 quizScreen.addEventListener("click", checkAnswer); 
+submit.addEventListener("click", saveHighScore); 
+startAnotherGame.addEventListener("click", []); 
+
+
+
 
